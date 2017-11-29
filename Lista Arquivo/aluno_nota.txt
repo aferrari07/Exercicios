@@ -1,0 +1,3 @@
+Nome;Nota1;nota2
+Ricardo;5;7
+Antonio;2;10
