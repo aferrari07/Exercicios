@@ -14,8 +14,23 @@ def mergesort(lista):
 defina a funcao merge do mergesort como já discutido
 '''
 def merge(lista1,lista2):
-    return lista1
-from mergesort_resposta import *
+    if not len(lista1) or not len(lista2):
+        return lista1 or lista2
+    result = []
+    i, j = 0, 0
+    while (len(result) < len(lista1) + len(lista2)):
+        if lista1[i] < lista2[j]:
+            result.append(lista1[i])
+            i+= 1
+        else:
+            result.append(lista2[j])
+            j+= 1
+        if i == len(lista1) or j == len(lista2):
+            result.extend(lista1[i:] or lista2[j:])
+            break
+    return result
+
+#from mergesort_resposta import *
 
 import unittest
 

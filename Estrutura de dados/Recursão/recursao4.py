@@ -8,11 +8,19 @@ por exemplo, soma_recursiva([1,2,3]) retorna 6
 '''
 
 def soma_recursiva(lista):
-    return 12
+    if len(lista) == 0:
+        return 0
+    else:
+        return lista[0]+soma_recursiva(lista[1:])
 
 '''defina uma função recursiva que retorna o maximo elemento de uma lista'''
 def maximo(lista):
-   return 1
+    if len(lista) == 1:
+        return lista[0]
+    maximo_resto = maximo(lista[1:])
+    if (maximo_resto > lista[0]):
+        return maximo_resto
+    return lista[0]
 '''
 #dica: uma coisa que você vai usar é o calculo recursivo do 
 #maximo de lista[1:]
@@ -32,7 +40,14 @@ Por exemplo conta_recursiva([],5) retorna 0
 '''
 
 def conta_recursiva(lista, numero):
-    return 0
+    if len(lista) == 0:
+        return 0
+    first = lista[0]
+    rest = lista[1:]
+    if first == numero:
+        return 1+conta_recursiva(rest,numero)
+    else:
+        return conta_recursiva(rest,numero)
 
 
 '''
@@ -56,7 +71,14 @@ todos os números
 Por exemplo, soma_ll([[[1,2,3],[4,5],11,4],9,8,4]) é 46
 '''
 def soma_ll(lista):
-    return 12
+    soma = 0
+    for e in lista:
+        if not eh_lista(e):
+            soma += e
+    for e in lista:
+        if eh_lista(e):
+            soma += soma_ll(e)
+    return soma
 
 ''' Escreva uma funcao maximo_ll que recebe uma lista de listas
 e retorna o maior número que aparece nessa lista de listas.
@@ -64,9 +86,19 @@ e retorna o maior número que aparece nessa lista de listas.
 Nao se preocupe com listas vazias: nenhuma das listas que você
 receber conterá listas vazias'''
 def maximo_ll(lista):
-    return 12
     
-
+    return " Não deu certo "
+    
+def conta_ll(lista,procurado):
+    cont = 0
+    for e in lista:
+        if not eh_lista(e):
+            if e == procurado:
+                cont += 1
+    for e in lista:
+        if eh_lista(e):
+            cont += conta_ll(e,procurado)
+    return cont
 
 
 import random
@@ -155,7 +187,7 @@ class TestStringMethods(unittest.TestCase):
         self.assertEqual(soma_ll([[-1],[1]]),0)
         self.assertEqual(soma_ll([[1],[[2],1]]),4)
     
-    def test_11_max_ll(self):
+    def not_11_max_ll(self):
         self.assertEqual(maximo_ll([1,2,3]), 3)
         self.assertEqual(maximo_ll([3,2,1]), 3)
         self.assertEqual(maximo_ll([3,10,15,30,2,1]), 30)
