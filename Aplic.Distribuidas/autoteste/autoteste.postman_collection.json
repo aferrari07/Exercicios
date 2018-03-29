@@ -1,0 +1,259 @@
+{
+	"info": {
+		"name": "autoteste",
+		"_postman_id": "21670251-6eb1-4be3-ba5c-8adb01b1a615",
+		"description": "",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "todas as questoes",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {},
+				"url": {
+					"raw": "http://localhost:5000/autoteste/questoes",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"autoteste",
+						"questoes"
+					]
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "todas as respostas",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {},
+				"url": {
+					"raw": "http://localhost:5000/autoteste/respostas",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"autoteste",
+						"respostas"
+					]
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "questao por id",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {},
+				"url": {
+					"raw": "http://localhost:5000/autoteste/questao/1",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"autoteste",
+						"questao",
+						"1"
+					]
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "nova questao",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"pergunta\":\"Quanto é 3+3?\",\n\t\"erradas\": [1,2,3,4,5],\n\t\"corretas\": [6]\n\t\n}"
+				},
+				"url": {
+					"raw": "http://localhost:5000/autoteste/questao/",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"autoteste",
+						"questao",
+						""
+					]
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "alternativas erradas add",
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"erradas\": [1,2,3,4,5,\"banana\"]\n}"
+				},
+				"url": {
+					"raw": "http://localhost:5000/autoteste/questao/1/erradas",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"autoteste",
+						"questao",
+						"1",
+						"erradas"
+					]
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "alternativas corretas add",
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"corretas\": [1,2,3,4,5,\"banana\"]\n}"
+				},
+				"url": {
+					"raw": "http://localhost:5000/autoteste/questao/1/corretas",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"autoteste",
+						"questao",
+						"1",
+						"corretas"
+					]
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "responder questao",
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"usuario\": \"fulano\",\n\t\"resposta\": \"Remote procedure call\"\n}"
+				},
+				"url": {
+					"raw": "http://localhost:5000/autoteste/responder/1/",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"autoteste",
+						"responder",
+						"1",
+						""
+					]
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "resposta invalida",
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"usuario\": \"fulano\",\n\t\"resposta\": \"Remote procedure CALLL\"\n}"
+				},
+				"url": {
+					"raw": "http://localhost:5000/autoteste/responder/1/",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"autoteste",
+						"responder",
+						"1",
+						""
+					]
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "resultados/notas",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {},
+				"url": {
+					"raw": "http://localhost:5000/autoteste/marcio/resultados",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"autoteste",
+						"marcio",
+						"resultados"
+					]
+				},
+				"description": ""
+			},
+			"response": []
+		}
+	]
+}

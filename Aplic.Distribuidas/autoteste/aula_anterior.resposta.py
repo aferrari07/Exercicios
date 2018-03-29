@@ -5,7 +5,7 @@ from flask import make_response
 
 app = Flask(__name__)
 
-tasks_iniciais = [
+tasks = [
     {
         'id': 1,
         'title': u'Fazer compras',
@@ -20,8 +20,6 @@ tasks_iniciais = [
     }
 ]
 
-tasks = tasks_iniciais
-
 '''
 Você consegue abrir a pagina que geramos abaixo?
 
@@ -31,7 +29,7 @@ Troque o texto
 '''
 @app.route('/')
 def index():
-        return "It fucking works!"
+        return "Hello, World!"
 '''
 A url definida nesse @app.route recebe a resposta da função;
 Ou seja, acessando a URL veremos a resposta da função.
@@ -72,6 +70,8 @@ def create_task():
         return make_response(jsonify({'error': 'Format not json'}),
                              400)
     '''um erro 400 indica um request mal formado'''
+    if 'title' not in request.json or request.json['title'] == '':
+        return 'no title', 400
     task = {
         'id': tasks[-1]['id'] + 1,#temos um bom motivo para nao
 #usar len(lista). Qual é?
@@ -88,52 +88,47 @@ https://en.wikipedia.org/wiki/List_of_HTTP_status_codes#2xx_Success
 https://en.wikipedia.org/wiki/List_of_HTTP_status_codes#4xx_Client_errors
 '''
 
+
+
+
+
+
+
 ''' crie uma função update que recebe um json parcial de uma 
 tarefa, e altera apenas os elementos recebidos
 '''
 
+
 @app.route('/todo/api/v1.0/tasks/<int:task_id>', methods=['PUT'])
 def update_task(task_id):
-    mudar = 'not found'
-    if not request.json:
-        return make_response(jsonify({'error':'Format not json'}),
-                             400)
+    task = 'nope'
+    for candidate in tasks: 
+       if candidate['id'] == task_id:
+           task = candidate
+         
+    if task == 'nope':
+        return 'tarefa não encontrada',404
+    print(task)
+    task['title'] = request.json.get('title', task['title'])
+    task['description'] = request.json.get('description', task['description'])
+    task['done'] = request.json.get('done', task['done'])
+    return jsonify({'task': task})
+    #para que serve esse return?
 
-    for task in tasks: 
-        if task['id'] == task_id:
-            mudar = task
 
-    if 'title' in request.json:
-        mudar['title'] = request.json['title']
-
-    if 'description' in request.json:
-        mudar['description'] = request.json['description']
-
-    if 'done' in request.json:
-        mudar['done'] = request.json['done']
-    return jsonify(mudar)
-            
-
-'''crie uma funcao delete_task, que deleta uma tarefa'''
-
+'''crie uma funcao delete_task, que deleta uma tarefa
+ela deve retornar erro se a tarefa não existir
+'''
 @app.route('/todo/api/v1.0/tasks/<int:task_id>', methods=['DELETE'])
 def delete_task(task_id):
-    if not request.json:
-        return make_response(jsonify({'error':'Format not json'}),
-                             400)
-
-    for task in tasks: 
-        if task['id'] == task_id:
-            task.pop(task)
-            
-    return jsonify({'task': task}), 201
-            
-
-'''
-ela deve retornar erro se a tarefa não existir
-
-'''
-
+    task = 'nope'
+    for candidate in tasks: 
+       if candidate['id'] == task_id:
+           task = candidate
+    if task == 'nope':
+        return 'tarefa não encontrada',404
+    tasks.remove(task)
+    return jsonify({'result': True})
 
 '''
 Crie uma função de busca, que recebe uma string e retorna
@@ -143,44 +138,14 @@ ou na descrição
 @app.route('/todo/api/v1.0/tasks/search', methods=['GET'])
 def search_text():
     query = request.args.get('query',None)
-    return 12
-''''''
-
-
-
-'''
-adicione um campo de prioridade às tarefas. Isso 
-implica alterar a função de criação e a função de
-update.
-
-A prioridade deve ser um número em [0,1,2...,8,9]
-
-Crie uma função que retorna a tarefa mais prioritária.
-Se houver mais de uma, pode desempatar como quiser
-
-(você também vai ter que alterar as tarefas iniciais e/ou
-as chamadas do Postman)
-
-@app.route('/todo/api/v1.0/tasks/highest', methods=['GET'])
-def highest_priority():
-  return 12
-
-'''
-
-'''
-adicione as tarefas um novo campo que marca quando elas
-foram criadas.
-
-Esse campo deve ser preenchido pelo servidor quando a tarefa
-é  recebida, nao enviado pelo cliente. Ele não
-deve ser alterado se a tarefa for alterada.
-
-Dica: pesquise python time objects
-
-@app.route('/todo/api/v1.0/tasks/oldest', methods=['GET'])
-def oldest():
-    return 12
-'''
+    if (query == None):
+       return jsonify({'error':'no query'}),400
+    results = []
+    for task in tasks:
+        if (query in task['title'] 
+           or query in task['description']):
+           results.append(task)
+    return jsonify({'results': results,'total':len(results)})
 
 '''
 adicione um erro quando tentamos criar uma tarefa sem título.
@@ -193,11 +158,6 @@ auto-explicativo para o usuário, no formato json
 Torne sua função de busca de tarefas com um determinado texto
 "case-insentive". Ou seja, ela deve ignorar quais letras
 são maiusculas ou minusculas quando ela faz a busca
-'''
-
-'''
-DESAFIO:
-Crie uma url que retorna as tarefas, ordenadas por prioridade.
 '''
 
 

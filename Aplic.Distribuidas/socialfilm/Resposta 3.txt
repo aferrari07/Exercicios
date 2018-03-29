@@ -1,0 +1,2 @@
+Soma get está com erro, os numeros não estão sendo somados porquê eles estão sendo contatenados, para resolver basta transformar em int.
+

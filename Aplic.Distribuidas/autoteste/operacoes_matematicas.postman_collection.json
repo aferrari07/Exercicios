@@ -1,0 +1,200 @@
+{
+	"info": {
+		"name": "operacoes_matematicas",
+		"_postman_id": "ef977792-429e-4465-8a9c-978f6e412c88",
+		"description": "",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "dois a quinta",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {},
+				"url": {
+					"raw": "http://localhost:5000/matematica/potencia_de_dois/5",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"matematica",
+						"potencia_de_dois",
+						"5"
+					]
+				},
+				"description": "Request valido"
+			},
+			"response": []
+		},
+		{
+			"name": "Request invalido",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {},
+				"url": {
+					"raw": "http://localhost:5000/matematica/potencia_de_dois/",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"matematica",
+						"potencia_de_dois",
+						""
+					]
+				},
+				"description": "Request invalido"
+			},
+			"response": []
+		},
+		{
+			"name": "soma post",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"a\": 2,\n\t\"b\": 15\n}"
+				},
+				"url": {
+					"raw": "http://localhost:5000/matematica/soma",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"matematica",
+						"soma"
+					]
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "soma post invalida",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"a\": 2,\n\t\"c\": 15\n}"
+				},
+				"url": {
+					"raw": "http://localhost:5000/matematica/soma",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"matematica",
+						"soma"
+					]
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "soma get",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "http://localhost:5000/matematica/soma?a=12&b=13",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"matematica",
+						"soma"
+					],
+					"query": [
+						{
+							"key": "a",
+							"value": "12",
+							"equals": true
+						},
+						{
+							"key": "b",
+							"value": "13",
+							"equals": true
+						}
+					]
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "soma get invertido",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "http://localhost:5000/matematica/soma?b=13&a=12",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"matematica",
+						"soma"
+					],
+					"query": [
+						{
+							"key": "b",
+							"value": "13",
+							"equals": true
+						},
+						{
+							"key": "a",
+							"value": "12",
+							"equals": true
+						}
+					]
+				},
+				"description": ""
+			},
+			"response": []
+		}
+	]
+}
