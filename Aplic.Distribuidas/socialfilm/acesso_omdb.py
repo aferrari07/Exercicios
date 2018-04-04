@@ -69,4 +69,17 @@ relacionados, no formato
   'film_id': 'IMDB_id'
 }
 '''
-
+def busca_filmes(texto_buscar):
+    url = "http://www.omdbapi.com/?apikey={}&s={}&type=movie".format(chave_omdb, texto_buscar)
+    retorno = req.get(url).json()
+    resposta = []
+    for filme in retorno['Search']:
+        while len(resposta) < 10:
+            result = {}
+            result['Title'] = filme['Title']
+            result['Year'] = filme['Year']
+            result['imdbID'] = filme['imdbID']
+            result['Type'] = filme['Type']
+            result['Poster'] = filme['Poster']
+            resposta.append(result)
+    return result

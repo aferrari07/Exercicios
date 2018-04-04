@@ -57,7 +57,7 @@ Mesmo dando problema com a firewall, voce deve conseguir vê-la em http://localh
 '''
 @app.route('/')
 def index():
-        return "Hello Vinao!"
+        return "Working just fine!"
 '''
 Vou deixar essa rota pronta pra vocês, para vocês poderem debugar mais facil
 
@@ -87,8 +87,8 @@ def get_review(film_id,user_id):
                 if search['film_id'] == film_id and search['user_id'] == user_id:
                         movie = search['comment']
         if movie == None:
-                return make_response(jsonify({'error': 'Comentario não encontrado'}),
-                             404)
+                return make_response(jsonify({'error':user_id +' não publicou um comentario sobre o filme até o momento.'}),
+                             200)
         return jsonify({'Comentario':movie})
 
 '''
@@ -154,9 +154,23 @@ devemos receber todas as reviews feitas pelo usuario
 '''
 @app.route('/socialfilm/reviews/all_films/<user_id>', methods=['GET'])
 def all_reviews(user_id):
-        u_rev = []
-        
-  return 'ola3'
+    u_rev = []
+    for search in reviews:
+        if search['user_id'] == user_id:
+            bypass = pega_nome(search['film_id'])
+            found = {
+                'film_id': bypass['film_id'],
+                'nome': bypass['nome'],
+                'user_id': search['user_id'],
+                'comment': search['comment']
+            }
+            u_rev.append(found)
+    if len(u_rev) == 0:
+        return jsonify( user_id + ' não publicou reviews desse filme até o momento.'), 200
+    
+    return jsonify(u_rev),200
+
+    
 
 '''
 Vamos adicionar o nome do filme na resposta anterior.
@@ -183,11 +197,41 @@ Agora, façamos a parte das estrelas:
 '''
 @app.route('/socialfilm/stars/<film_id>/<user_id>', methods=['GET'])
 def retorna_estrelas(film_id,user_id):
-    return 'estrelas'
+    movie = None
+    for search in notas:
+        if search['film_id'] == film_id and search['user_id'] == user_id:
+            movie = search['stars']
+    if movie == None:
+        return make_response(jsonify({'error': user_id + ' ainda não deu nota para esse filme'}),
+            200)
+    return jsonify({'Estrelas':movie})
 
 @app.route('/socialfilm/stars/<film_id>/<user_id>', methods=['PUT'])
 def add_estrelas(film_id,user_id):
-    return 'mais estrelas'
+    bypass = existe_id(film_id)
+    if bypass == False:
+        return make_response(jsonify('Id invalida'),
+                             400)
+    if 'stars' not in request.json:
+        return make_response(jsonify('Operação invalida'),
+                             400)
+    if request.json['stars'] > 5:
+        return make_response(jsonify('Numero de estrelas acima do permitido, use nota entre 0 e 5.'))
+    for search in notas:
+        if (search['film_id'] == film_id) and (search['user_id'] == user_id):
+            search['stars'] = request.json['stars']
+            return make_response(jsonify(search),
+                             200)
+
+    if (search['film_id'] == film_id and search['user_id'] == user_id) not in notas:
+        post = {
+            'stars':request.json['stars'],
+            'film_id': film_id,
+            'user_id': user_id
+            }
+        notas.append(post)
+        return make_response(jsonify(post),
+                             200)
 
 '''
 Para vermos a média de estrelas de um filme, podemos acessar a URL
@@ -199,7 +243,20 @@ ou 'nao avaliado' se nenhum usuário avaliou o filme ainda
 '''
 @app.route('/socialfilm/stars/<film_id>/average', methods=['GET'])
 def retorna_media(film_id):
-    return '12'
+    total, cont = 0, 0
+    bypass = existe_id(film_id)
+    if bypass == False:
+        return make_response(jsonify('Id invalida'),
+                             400)
+    for search in notas:
+        if search['film_id'] == film_id:
+            total += search['stars']
+            cont += 1
+    if cont == 0:
+        return make_response(jsonify('Nenhum review encontrado para este filme.')), 200
+    
+    return jsonify({'average_stars':(total/cont)}), 200
+
 
 '''
 Vamos implementar uma funcao de busca. Ela recebe uma string,
@@ -219,8 +276,36 @@ Note que já fizemos algo muito parecido na atividade do OMDB
 
 @app.route('/socialfilm/search', methods=['GET'])
 def busca_filme():
-        termo_busca = request.args.get('buscar', None)
-        return termo_busca
+        termo_busca = request.args.get('buscar',None)
+        if termo_busca == '':
+            return make_response(jsonify('Busca mal formada'), 400)
+        
+        atena = busca_filmes(termo_busca)
+        itaca = []
+        sparta = {}
+
+        for (castor,pollux) in zip(reviews,notas):
+            if (atena['imdbID'] == castor['film_id']) and (atena['imdbID'] == pollux['film_id']):
+                sparta['Titulo'] = atena['Title']
+                sparta['Ano'] = atena['Year']
+                sparta['Review'] = castor['comment']
+                sparta['Estrelas'] = pollux['stars']
+                itaca.append(sparta)
+            if atena['imdbID'] not in notas:
+                sparta['Titulo'] = atena['Title']
+                sparta['Ano'] = atena['Year']
+                sparta['Review'] = castor['comment']
+                sparta['Estrelas'] = 'Ainda não avaliado'
+                itaca.append(sparta)
+            if atena['imdbID'] not in reviews:
+                sparta['Titulo'] = atena['Title']
+                sparta['Ano'] = atena['Year']
+                sparta['Review'] = 'Review indisponivel'
+                sparta['Estrelas'] = pollux['stars']
+                itaca.append(sparta)
+        
+        return jsonify(itaca)
+        
 
 '''
 Trate erro da funcao de busca: se por acaso ela nao contiver o termo da busca, retorne
